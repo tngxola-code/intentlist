@@ -1,0 +1,64 @@
+# AI reviewer 2 of 2: data integrity, privacy and compliance invariants.
+# Needs repo secret ANTHROPIC_API_KEY. Comments only; a human still approves the merge.
+name: "AI Review 2: Data Integrity & Compliance"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ai-review-compliance-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          use_sticky_comment: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            BASE BRANCH: ${{ github.event.pull_request.base.ref }}
+
+            You are AI REVIEWER 2 — DATA INTEGRITY & COMPLIANCE. Another AI reviewer covers general
+            engineering and security; stay in your lane. Read CLAUDE.md first: its "Invariants" section is
+            your checklist. This repo is built as a stack of feature branches, so review ONLY the diff of
+            this PR against its base branch (`gh pr diff`), using the rest of the repo as context.
+
+            For each invariant the diff touches, check whether it still holds and whether a test proves it:
+            1. No fabricated data: every delivered name/email/description is verbatim on the captured page;
+               the evidence lock is enforced in code AFTER any LLM step; reviewer edits meet the same bar.
+            2. No guessed emails: no pattern-guessing, enrichment, or de-obfuscation of "[at]" addresses.
+            3. Compliance boundary: nothing is fetched unless the domain is registered and allowed; robots.txt
+               respected; no cookies/credentials/login-walled content; honest User-Agent.
+            4. Data minimisation: personal data of rejected posts is not stored; suppression list is checked
+               before any paid call; opt-outs withdraw undelivered records.
+            5. Delivery integrity: only `valid` emails count toward a batch; catch-all is separate; no
+               person+item is ever delivered twice across batches or categories; batches are never padded.
+            6. LLM safety: page content passed as untrusted data inside delimiters; schema-bound output.
+            7. Cost: no paid call (search/LLM/verification) is added before a free check that could avoid it;
+               new spend is metered via `meter()`.
+
+            Output rules:
+            - Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) for specific lines.
+            - Post ONE summary with `gh pr comment`, headed "## AI Review 2: Data Integrity & Compliance",
+              with a table: Invariant | Touched? | Holds? | Tested? — then findings as BLOCKER / SHOULD-FIX / NIT
+              with file:line, then a final line exactly `VERDICT: APPROVE` or `VERDICT: CHANGES REQUESTED`.
+            - This is not legal advice; flag legal questions for the human owner rather than ruling on them.
+            - If nothing in the diff touches an invariant, say so briefly. Do not invent issues.
+            - Only post GitHub comments; don't return review text as a message.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"

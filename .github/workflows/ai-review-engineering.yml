@@ -1,0 +1,59 @@
+# AI reviewer 1 of 2: engineering (correctness, security, tests).
+# Needs repo secret ANTHROPIC_API_KEY. Comments only; a human still approves the merge.
+name: "AI Review 1: Engineering"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+concurrency:
+  group: ai-review-engineering-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          use_sticky_comment: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            BASE BRANCH: ${{ github.event.pull_request.base.ref }}
+
+            You are AI REVIEWER 1 — ENGINEERING. Another AI reviewer covers data integrity and compliance;
+            stay in your lane. Read CLAUDE.md first. This repo is built as a stack of feature branches, so
+            review ONLY the diff of this PR against its base branch (`gh pr diff`), using the rest of the
+            repo as context. Do not flag code that is missing because it arrives in a later branch.
+
+            Review for:
+            1. Correctness: logic errors, edge cases, wrong status transitions, off-by-one in batch sizes,
+               timezone/naive-datetime bugs, SQLite vs Postgres differences.
+            2. Security: injection, XSS in the review console (snapshot text must be escaped), CSRF, auth,
+               secrets in code or logs, SSRF via fetched URLs, unsafe deserialisation.
+            3. Reliability: idempotency of pipeline stages, retries/backoff on external APIs, transaction
+               boundaries, row claiming under concurrency.
+            4. Tests: does every behaviour change have a test? Name the missing test precisely.
+            5. Maintainability: only where it causes real risk. No style nitpicks (ruff handles style).
+
+            Output rules:
+            - Use `mcp__github_inline_comment__create_inline_comment` (with `confirmed: true`) for specific lines.
+            - Post ONE summary with `gh pr comment`, headed "## AI Review 1: Engineering", listing findings as
+              BLOCKER / SHOULD-FIX / NIT with file:line, then a final line exactly
+              `VERDICT: APPROVE` or `VERDICT: CHANGES REQUESTED`.
+            - If there are no real problems, say so briefly. Do not invent issues.
+            - Only post GitHub comments; don't return review text as a message.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*),Read,Grep,Glob"
