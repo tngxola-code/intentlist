@@ -1,0 +1,45 @@
+# Production-style stack: Postgres + migrations + review console + weekly scheduler.
+# Usage: cp .env.example .env  (fill in keys)  &&  docker compose up -d
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: intentlist
+      POSTGRES_USER: intentlist
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U intentlist"]
+      interval: 5s
+      retries: 10
+
+  migrate:
+    build: .
+    env_file: .env
+    environment: &dburl
+      INTENTLIST_DATABASE_URL: postgresql+psycopg://intentlist:${POSTGRES_PASSWORD:-change-me}@db:5432/intentlist
+    command: ["intentlist", "init-db"]
+    depends_on: {db: {condition: service_healthy}}
+
+  review:
+    build: .
+    env_file: .env
+    environment: *dburl
+    command: ["intentlist", "review", "serve", "--host", "0.0.0.0", "--port", "8000"]
+    ports: ["127.0.0.1:8000:8000"]   # put a TLS reverse proxy in front before exposing it publicly
+    volumes: [appdata:/app/data]
+    depends_on: {migrate: {condition: service_completed_successfully}}
+    restart: unless-stopped
+
+  scheduler:
+    build: .
+    env_file: .env
+    environment: *dburl
+    command: ["intentlist", "schedule", "--cron", "${INTENTLIST_SCHEDULE_CRON:-0 2 * * MON}"]
+    volumes: [appdata:/app/data]
+    depends_on: {migrate: {condition: service_completed_successfully}}
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  appdata:

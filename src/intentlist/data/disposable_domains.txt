@@ -1,0 +1,26 @@
+# Seed list of disposable-email domains. Extend from a maintained source
+# (e.g. github.com/disposable-email-domains/disposable-email-domains) during deployment.
+10minutemail.com
+20minutemail.com
+33mail.com
+discard.email
+dispostable.com
+emailondeck.com
+fakeinbox.com
+getnada.com
+guerrillamail.com
+guerrillamail.net
+maildrop.cc
+mailinator.com
+mailnesia.com
+mintemail.com
+mohmal.com
+mytemp.email
+sharklasers.com
+spamgourmet.com
+temp-mail.org
+tempmail.com
+tempmailo.com
+throwawaymail.com
+trashmail.com
+yopmail.com
