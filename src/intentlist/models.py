@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import enum
+from typing import ClassVar
 from datetime import UTC, date, datetime
 
 from sqlalchemy import (
