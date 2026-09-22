@@ -20,9 +20,11 @@ Contact: jane.doerksen@example.org
 
 
 def rec(**kw) -> ExtractedRecord:
-    base = dict(full_name="Jane Doerksen", email="jane.doerksen@example.org", item_sought="Rolex Daytona",
-                item_description="WTB Rolex Daytona 116500LN white dial, full set.", date_posted_raw="2026-05-01",
-                intent_phrase="WTB", evidence={"full_name": "Regards, Jane Doerksen"}, confidence=0.9)
+    base = {
+        "full_name": "Jane Doerksen", "email": "jane.doerksen@example.org", "item_sought": "Rolex Daytona",
+        "item_description": "WTB Rolex Daytona 116500LN white dial, full set.", "date_posted_raw": "2026-05-01",
+        "intent_phrase": "WTB", "evidence": {"full_name": "Regards, Jane Doerksen"}, "confidence": 0.9,
+    }
     base.update(kw)
     return ExtractedRecord(**base)
 

@@ -16,17 +16,21 @@ Contact: jane.doerksen@example.org
 
 
 def rec(**kw) -> ExtractedRecord:
-    base = dict(full_name="Jane Doerksen", email="jane.doerksen@example.org", item_sought="Rolex Daytona",
-                item_description="WTB Rolex Daytona 116500LN white dial, full set.", date_posted_raw="2026-05-01",
-                intent_phrase="WTB", evidence={}, confidence=0.9)
+    base = {
+        "full_name": "Jane Doerksen", "email": "jane.doerksen@example.org", "item_sought": "Rolex Daytona",
+        "item_description": "WTB Rolex Daytona 116500LN white dial, full set.", "date_posted_raw": "2026-05-01",
+        "intent_phrase": "WTB", "evidence": {}, "confidence": 0.9,
+    }
     base.update(kw)
     return ExtractedRecord(**base)
 
 
 def gate(r, tax, page=PAGE, **kw):
-    args = dict(page_text=page, spec=tax.categories["watches"], taxonomy=tax,
-                fetched_at=datetime(2026, 6, 1, tzinfo=UTC), suppressed=set(), max_age_days=730,
-                min_confidence=0.6)
+    args = {
+        "page_text": page, "spec": tax.categories["watches"], "taxonomy": tax,
+        "fetched_at": datetime(2026, 6, 1, tzinfo=UTC), "suppressed": set(), "max_age_days": 730,
+        "min_confidence": 0.6,
+    }
     args.update(kw)
     return qualify(r, **args)
 
