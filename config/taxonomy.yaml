@@ -1,0 +1,82 @@
+# Category taxonomy. Only `active: true` categories are scheduled.
+# The 16 categories after watches and cars are PROVISIONAL: confirm the list with the client.
+#
+# Specificity rule (qualification gate): a request counts as "specific" when its description
+# mentions at least one maker AND at least one of: a model keyword, a reference pattern match,
+# or a model year. "Looking for a nice watch" fails; "WTB Rolex 116500LN Daytona" passes.
+
+intent_phrases:
+  en: ["WTB", "want to buy", "wanted to buy", "ISO", "in search of", "looking for", "looking to buy",
+       "seeking", "wanted:", "searching for", "hunting for", "anyone selling", "on the hunt for"]
+  fr: ["recherche", "je cherche", "à la recherche de", "achète"]
+  de: ["suche", "gesucht", "kaufe"]
+  es: ["busco", "compro", "se busca"]
+  it: ["cerco", "compro"]
+  nl: ["gezocht", "zoek"]
+
+categories:
+  - slug: watches
+    name: Rare and valuable watches
+    active: true
+    makers: [Rolex, Patek Philippe, Audemars Piguet, Vacheron Constantin, A. Lange & Söhne, Richard Mille,
+             Omega, Jaeger-LeCoultre, Breguet, F.P. Journe, Cartier, Tudor, Heuer, Universal Geneve,
+             Grand Seiko, IWC, Panerai, Blancpain, Zenith, MB&F, De Bethune, Philippe Dufour]
+    models: [Daytona, Submariner, GMT-Master, Explorer, Sea-Dweller, Day-Date, Datejust, Milgauss,
+             Nautilus, Aquanaut, Calatrava, Royal Oak, Offshore, Overseas, Speedmaster, Seamaster,
+             Reverso, Lange 1, Datograph, Tank, Crash, Santos, Monaco, Carrera, Autavia, Polerouter,
+             Snowflake, Chronomètre Bleu, Luminor, Radiomir, Fifty Fathoms, Tourbillon, Paul Newman]
+    reference_patterns: ['\b\d{4,6}[A-Z]{0,4}\b', '\bref\.?\s*[A-Z0-9./-]{3,}\b']
+    year_pattern: '\b(19[2-9]\d|20[0-2]\d)\b'
+    min_value_hint_usd: 5000
+
+  - slug: cars
+    name: Classic and collectible cars
+    active: true
+    makers: [Ferrari, Porsche, Lamborghini, Aston Martin, Mercedes-Benz, Jaguar, Bugatti, McLaren, Shelby,
+             Ford, Chevrolet, Alfa Romeo, Lancia, BMW, Maserati, Land Rover, Toyota, Nissan, Datsun,
+             Lotus, De Tomaso, Bentley, Rolls-Royce, AC, Austin-Healey, Plymouth, Dodge, Pontiac]
+    models: [250 GT, 275, Daytona, Dino, F40, F50, Testarossa, 911, 930, 964, 993, Carrera RS, 356, 959,
+             Miura, Countach, Diablo, DB4, DB5, 300SL, Gullwing, E-Type, XK120, Cobra, GT350, GT500,
+             GT40, Corvette, Camaro, Mustang, Stratos, Delta Integrale, M1, E30 M3, Defender, Land Cruiser,
+             Supra, 2000GT, Skyline, GT-R, 240Z, Ghibli, Mangusta, Pantera, Hemi Cuda, Superbird, GTO]
+    reference_patterns: ['\b(1[0-9]{2}|[2-9][0-9]{2})\s?(GT|GTB|GTS|SL|RS)\b', '\bchassis\s*#?\s*\w+']
+    year_pattern: '\b(19[0-9]{2}|20[0-2][0-9])\b'
+    min_value_hint_usd: 25000
+
+  # ----- provisional (inactive) ------------------------------------------------------------
+  - {slug: motorcycles, name: Classic and collectible motorcycles, active: false,
+     makers: [Brough Superior, Vincent, Ducati, MV Agusta, Norton, Triumph, Harley-Davidson, Honda, BMW, Bimota],
+     models: [Black Shadow, SS100, 750SS, CB750, Bonneville, Knucklehead, Panhead, R90S, Commando], year_pattern: '\b(19[0-9]{2}|20[0-2][0-9])\b'}
+  - {slug: fine-art, name: Fine art, active: false,
+     makers: [Picasso, Warhol, Basquiat, Hockney, Banksy, Haring, Lichtenstein, Kusama, Miró, Chagall],
+     models: [lithograph, screenprint, etching, original, signed, numbered, edition]}
+  - {slug: coins, name: Rare coins, active: false,
+     makers: [Morgan, Saint-Gaudens, Krugerrand, Sovereign, Liberty, Buffalo, Maple Leaf, Britannia],
+     models: [PCGS, NGC, MS65, MS66, MS67, proof, double eagle, dollar, penny], year_pattern: '\b(1[5-9]\d{2}|20[0-2]\d)\b'}
+  - {slug: stamps, name: Rare stamps, active: false,
+     makers: [Penny Black, Inverted Jenny, Cape Triangular, Mauritius, Treskilling], models: [mint, used, block, cover, plate]}
+  - {slug: rare-books, name: Rare books and first editions, active: false,
+     makers: [Tolkien, Rowling, Fleming, Hemingway, Fitzgerald, Austen, Dickens, Orwell, Darwin],
+     models: [first edition, first printing, signed, inscribed, dust jacket, "1st/1st"]}
+  - {slug: sports-memorabilia, name: Sports memorabilia, active: false,
+     makers: [Jordan, Ruth, Pelé, Maradona, Ali, Brady, Gretzky, Messi, Ronaldo], models: [game-worn, game-used, signed, jersey, match-worn]}
+  - {slug: trading-cards, name: Trading cards, active: false,
+     makers: [Pokémon, Topps, Upper Deck, Panini, Fleer, Magic the Gathering], models: [PSA 10, BGS, rookie, 1st edition, Charizard, Black Lotus]}
+  - {slug: comics, name: Comic books, active: false,
+     makers: [Marvel, DC, Action Comics, Amazing Fantasy, Detective Comics], models: [CGC, "#1", key issue, first appearance]}
+  - {slug: guitars, name: Vintage guitars, active: false,
+     makers: [Gibson, Fender, Martin, Gretsch, Rickenbacker, D'Angelico], models: [Les Paul, Stratocaster, Telecaster, D-45, "burst", ES-335, Flying V], year_pattern: '\b(19[3-9]\d)\b'}
+  - {slug: wine-spirits, name: Fine wine and rare spirits, active: false,
+     makers: [Pétrus, Romanée-Conti, Macallan, Yamazaki, Karuizawa, Pappy Van Winkle, Screaming Eagle], models: [vintage, bottle, cask, year old, magnum], year_pattern: '\b(19[0-9]{2}|20[0-2][0-9])\b'}
+  - {slug: jewelry, name: Fine jewelry and gemstones, active: false,
+     makers: [Van Cleef, Cartier, Tiffany, Graff, Harry Winston, Bulgari], models: [Alhambra, Love bracelet, Juste un Clou, carat, GIA, sapphire, emerald]}
+  - {slug: handbags, name: Luxury handbags, active: false,
+     makers: [Hermès, Chanel, Louis Vuitton, Dior], models: [Birkin, Kelly, Constance, Classic Flap, "Boy Bag", "25", "30", "35"]}
+  - {slug: antique-furniture, name: Antique furniture, active: false,
+     makers: [Chippendale, Eames, Knoll, Wegner, Prouvé, Nakashima, Stickley], models: [chair, desk, cabinet, commode, lounge]}
+  - {slug: vinyl, name: Rare vinyl records, active: false,
+     makers: [Beatles, Led Zeppelin, Pink Floyd, Blue Note, Prince, Bowie], models: [first pressing, matrix, test pressing, mono, promo]}
+  - {slug: cameras, name: Collectible cameras, active: false,
+     makers: [Leica, Hasselblad, Nikon, Canon, Zeiss, Rolleiflex], models: [M3, MP, "0-series", Noctilux, SP, F, 500C]}
+  - {slug: pens, name: Collectible fountain pens, active: false,
+     makers: [Montblanc, Pelikan, Parker, Namiki, Nakaya, Sheaffer, Waterman], models: [Meisterstück, limited edition, Duofold, maki-e, "149", "Patron of Art"]}

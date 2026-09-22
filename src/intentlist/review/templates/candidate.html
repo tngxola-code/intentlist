@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block body %}
+{% if error %}<div class="err">{{ error }}</div>{% endif %}
+<p><a href="/queue/{{ category.slug }}">&larr; {{ category.name }} queue</a> · Record {{ c.id }} · status <b>{{ c.status.value }}</b></p>
+<div class="grid">
+<div>
+<form class="card" method="post" action="/candidates/{{ c.id }}/decision">
+  <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="next_id" value="{{ next_id or '' }}">
+  <label>Full name</label><input type="text" name="full_name" value="{{ c.full_name or '' }}">
+  <label>Email · <span class="{{ c.email_status.value if c.email_status else '' }}">{{ c.email_status.value if c.email_status else 'unverified' }}</span></label>
+  <input type="text" name="email" value="{{ c.email or '' }}">
+  <label>Item sought (1–3 words)</label><input type="text" name="item_sought" value="{{ c.item_sought or '' }}">
+  <label>Exact item description</label><textarea name="item_description">{{ c.item_description or '' }}</textarea>
+  <label>Date posted (YYYY-MM-DD) · page says “{{ c.date_posted_raw or 'n/a' }}”</label>
+  <input type="text" name="date_posted" value="{{ c.date_posted or '' }}">
+  <label>Source</label><a href="{{ cap.url }}" target="_blank" rel="noopener noreferrer">{{ cap.url }}</a>
+  <label>Flags</label>{% for f in c.flags %}<span class="pill">{{ f }}</span>{% else %}<span class="muted">none</span>{% endfor %}
+  <label>Reject reason</label><select name="reason"><option value="">–</option>{% for r in reasons %}<option>{{ r }}</option>{% endfor %}</select>
+  <label>Notes</label><input type="text" name="notes">
+  <label><input type="checkbox" name="override" value="true"> Override evidence check (note required)</label>
+  <p><button class="btn approve" name="decision" value="approve">Approve</button>
+     <button class="btn reject" name="decision" value="reject">Reject</button></p>
+  <p class="muted">Check: is this person the buyer? Is the item specific and high-value? Does the email belong to them? Is the post current?</p>
+</form>
+<div class="card"><b>Evidence quotes</b>{% for k, v in (c.evidence or {}).items() %}<div class="quote"><span class="muted">{{ k }}</span><br>{{ v }}</div>{% endfor %}</div>
+</div>
+<div class="card"><b>Captured page</b> <span class="muted">· {{ cap.fetched_at.strftime('%Y-%m-%d %H:%M') if cap.fetched_at else '' }} · sha256 {{ (cap.content_sha256 or '')[:12] }}</span>
+<div class="snapshot">{{ snapshot|safe }}</div></div>
+</div>
+{% endblock %}

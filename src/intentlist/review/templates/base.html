@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}IntentList Review{% endblock %}</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#1c1c1a;--muted:#6b6b66;--line:#e3e2dc;--accent:#1f4fd1;--ok:#137a3a;--bad:#b42318;--warn:#8a5a00;--mark:#ffe58a}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--accent:#7aa2ff;--ok:#58c784;--bad:#ff7b6b;--warn:#e0b050;--mark:#6b5a12}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+header{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);background:var(--card)}
+header a{color:var(--ink);text-decoration:none;font-weight:600}main{max-width:1400px;margin:0 auto;padding:20px}
+a{color:var(--accent)}table{width:100%;border-collapse:collapse;background:var(--card)}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:minmax(340px,440px) 1fr;gap:16px}@media (max-width:900px){.grid{grid-template-columns:1fr}}
+label{display:block;font-size:12px;color:var(--muted);margin-top:10px}input[type=text],textarea,select{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:inherit}
+textarea{min-height:90px}.btn{border:0;border-radius:6px;padding:9px 16px;font-weight:600;cursor:pointer;color:#fff}.approve{background:var(--ok)}.reject{background:var(--bad)}
+.pill{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin:2px 2px 0 0}
+.valid{color:var(--ok)}.catch_all{color:var(--warn)}.err{background:var(--bad);color:#fff;padding:10px 14px;border-radius:8px;margin-bottom:12px}
+.snapshot{white-space:pre-wrap;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:75vh;overflow:auto}
+mark{background:var(--mark);color:inherit;padding:0 2px;border-radius:3px}.muted{color:var(--muted)}.kpis{display:flex;gap:16px;flex-wrap:wrap}.kpi{min-width:170px}.kpi b{font-size:24px;display:block}
+.quote{border-left:3px solid var(--line);padding-left:10px;margin:4px 0;font-size:13px}
+</style></head>
+<body><header><a href="/">IntentList Review</a><span class="muted">{{ user }}</span></header>
+<main>{% block body %}{% endblock %}</main></body></html>

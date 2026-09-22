@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block body %}
+<div class="card kpis">
+  <div class="kpi"><span class="muted">Records delivered</span><b>{{ delivered }}</b></div>
+  <div class="kpi"><span class="muted">Metered spend</span><b>${{ "%.2f"|format(spend) }}</b></div>
+  <div class="kpi"><span class="muted">Cost per delivered record</span><b>{% if cost_per_record is not none %}${{ "%.3f"|format(cost_per_record) }}{% else %}–{% endif %}</b></div>
+</div>
+<div class="card"><h3>Categories</h3>
+<table><tr><th>Category</th><th>Awaiting review</th><th>Approved</th><th>Exported</th><th>Duplicates</th><th>Rejected (gate/email)</th><th>Rejected (review)</th></tr>
+{% for slug, row in cats.items() %}{% set n = row.counts %}
+<tr><td>{{ row.name }}{% if not row.active %} <span class="pill muted">inactive</span>{% endif %}</td>
+<td>{% if n.get('pending_review') %}<a href="/queue/{{ slug }}">{{ n.get('pending_review') }}</a>{% else %}0{% endif %}</td>
+<td>{{ n.get('approved',0) }}</td><td>{{ n.get('exported',0) }}</td><td>{{ n.get('duplicate',0) }}</td>
+<td>{{ n.get('rejected',0) }}</td><td>{{ n.get('rejected_review',0) }}</td></tr>{% endfor %}
+</table></div>
+<div class="card"><h3>Recent batches</h3>
+<table><tr><th>Category</th><th>Batch</th><th>Counted</th><th>Catch-all</th><th>Created</th><th>File</th></tr>
+{% for b in batches %}<tr><td>{{ b.category.name }}</td><td>{{ b.number }}</td><td>{{ b.record_count }}</td><td>{{ b.sidecar_count }}</td>
+<td>{{ b.created_at.strftime('%Y-%m-%d %H:%M') }}</td><td class="muted">{{ b.file_path }}</td></tr>{% else %}<tr><td colspan="6" class="muted">No batches yet.</td></tr>{% endfor %}
+</table></div>
+{% endblock %}

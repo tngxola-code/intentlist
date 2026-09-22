@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block body %}
+<h2>{{ cat.name }}: awaiting review ({{ items|length }})</h2>
+<table><tr><th>ID</th><th>Name</th><th>Email</th><th>Item</th><th>Posted</th><th>Conf.</th><th>Flags</th></tr>
+{% for c in items %}<tr><td><a href="/candidates/{{ c.id }}">{{ c.id }}</a></td><td>{{ c.full_name }}</td>
+<td class="{{ c.email_status.value }}">{{ c.email }}<br><small>{{ c.email_status.value }}</small></td>
+<td>{{ c.item_sought }}</td><td>{{ c.date_posted or '–' }}</td><td>{{ "%.2f"|format(c.confidence) }}</td>
+<td>{% for f in c.flags %}<span class="pill">{{ f }}</span>{% endfor %}</td></tr>
+{% else %}<tr><td colspan="7" class="muted">Queue is empty.</td></tr>{% endfor %}</table>
+{% endblock %}
