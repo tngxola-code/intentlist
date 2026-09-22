@@ -1,5 +1,5 @@
 """Branch 5: qualification gate."""
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -25,7 +25,7 @@ def rec(**kw) -> ExtractedRecord:
 
 def gate(r, tax, page=PAGE, **kw):
     args = dict(page_text=page, spec=tax.categories["watches"], taxonomy=tax,
-                fetched_at=datetime(2026, 6, 1, tzinfo=timezone.utc), suppressed=set(), max_age_days=730,
+                fetched_at=datetime(2026, 6, 1, tzinfo=UTC), suppressed=set(), max_age_days=730,
                 min_confidence=0.6)
     args.update(kw)
     return qualify(r, **args)

@@ -158,8 +158,8 @@ def export_batch(session: Session, category_slug: str, export_dir: Path, batch_s
         ("Records counted (valid email)", len(counted)), ("Catch-all records (separate tab, not counted)", len(sidecar)),
         ("Approved valid records still available after this batch", available_total - len(counted)),
         ("Duplicate policy", "Checked against every record in every previously delivered batch, all categories."),
-        ("Evidence policy", "Every name, email and description appears verbatim in the captured source page; "
-                            "the snapshot hash identifies the stored copy."),
+        ("Evidence policy", ("Every name, email and description appears verbatim in the captured source page; "
+                             "the snapshot hash identifies the stored copy.")),
         ("Review policy", "Every record was approved by a named human reviewer."), ("", ""),
         ("Email status", "Meaning"), *STATUS_DEFINITIONS,
     ]

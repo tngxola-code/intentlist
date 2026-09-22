@@ -9,12 +9,13 @@ import logging
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
-from datetime import timedelta, timezone
+from datetime import UTC, timedelta
 
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
-from ..config import CategorySpec, Taxonomy, taxonomy as load_tax
+from ..config import CategorySpec, Taxonomy
+from ..config import taxonomy as load_tax
 from ..db import audit, meter
 from ..discovery.fetcher import CaptureStore, Fetcher, SourceRegistry, html_to_text
 from ..discovery.planner import ClaudePlanner, Planner, TemplatePlanner
@@ -65,7 +66,7 @@ class Services:
     store: CaptureStore
 
     @classmethod
-    def from_settings(cls, settings: Settings | None = None) -> "Services":
+    def from_settings(cls, settings: Settings | None = None) -> Services:
         s = settings or get_settings()
         tax = load_tax()
         llm = ClaudeClient(s) if "claude" in (s.extractor, s.planner) else None
@@ -335,4 +336,4 @@ class Pipeline:
 
 
 def _aware(dt):
-    return dt if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+    return dt if dt.tzinfo else dt.replace(tzinfo=UTC)

@@ -23,7 +23,7 @@ from ..settings import Settings
 
 log = logging.getLogger(__name__)
 
-_MAILTO = re.compile(r'<a\b[^>]*href=["\']mailto:([^"\'?]+)[^"\']*["\'][^>]*>(.*?)</a>', re.I | re.S)
+_MAILTO = re.compile(r'<a\b[^>]*href=["\']mailto:([^"\'?]+)[^"\']*["\'][^>]*>(.*?)</a>', re.IGNORECASE | re.DOTALL)
 
 
 @dataclass

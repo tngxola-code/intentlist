@@ -54,3 +54,10 @@ addopts = "-q"
 [tool.ruff]
 line-length = 110
 target-version = "py311"
+
+[tool.ruff.lint]
+# B008: FastAPI Depends() / typer Option() in defaults is the documented idiom.
+# BLE001: pipeline stages isolate per-item failures so one bad page cannot fail a run.
+# DTZ001/DTZ005/DTZ011: page dates are calendar dates; anything persisted is normalised to UTC.
+# RUF012: SQLAlchemy/Pydantic class-attribute maps.
+ignore = ["B008", "BLE001", "DTZ001", "DTZ005", "DTZ011", "RUF012"]

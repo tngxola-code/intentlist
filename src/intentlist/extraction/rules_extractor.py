@@ -14,9 +14,9 @@ _NAME_LINE = re.compile(
 _DATE_LINE = re.compile(
     r"\b(?:posted(?:\s+on)?|date)\s*:?\s*(.+)$|"
     r"(\d{4}-\d{2}-\d{2}|\d{1,2}\s+[A-Z][a-z]{2,8}\s+\d{4}|[A-Z][a-z]{2,8}\s+\d{1,2},?\s+\d{4}|\d+\s+\w+\s+ago)",
-    re.I,
+    re.IGNORECASE,
 )
-_SELLER = re.compile(r"(?<!\w)(WTS|FS|for sale|selling|price drop|asking price)(?!\w)", re.I)
+_SELLER = re.compile(r"(?<!\w)(WTS|FS|for sale|selling|price drop|asking price)(?!\w)", re.IGNORECASE)
 _NOT_NAMES = {"wanted to buy", "want to buy", "looking for", "in search of", "reply", "quote", "report", "share"}
 
 

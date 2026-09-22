@@ -6,8 +6,8 @@ import hmac
 import html
 import re
 import secrets
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -168,6 +168,6 @@ def highlight(text: str, quotes: list[str], limit: int = 40_000) -> str:
         tokens = [re.escape(html.escape(t)) for t in q.split()]
         if not tokens:
             continue
-        pattern = re.compile(r"\s+".join(tokens), re.I)
+        pattern = re.compile(r"\s+".join(tokens), re.IGNORECASE)
         escaped = pattern.sub(lambda m: f"<mark>{m.group(0)}</mark>", escaped, count=3)
     return escaped

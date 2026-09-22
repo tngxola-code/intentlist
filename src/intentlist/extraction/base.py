@@ -35,7 +35,7 @@ class Extractor(Protocol):
     def extract(self, page_text: str, url: str, category_name: str) -> ExtractionResult: ...
 
 
-_RELATIVE = re.compile(r"(\d+)\s+(minute|hour|day|week|month|year)s?\s+ago", re.I)
+_RELATIVE = re.compile(r"(\d+)\s+(minute|hour|day|week|month|year)s?\s+ago", re.IGNORECASE)
 
 
 def parse_post_date(raw: str | None, reference: datetime | None = None) -> date | None:

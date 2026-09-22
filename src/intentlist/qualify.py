@@ -9,7 +9,7 @@ from .config import CategorySpec, Taxonomy
 from .extraction.base import ExtractedRecord, parse_post_date
 from .normalize import norm_email, norm_text
 
-_SELLER = re.compile(r"(?<!\w)(WTS|FS|for sale|selling|price drop|asking price|sold)(?!\w)", re.I)
+_SELLER = re.compile(r"(?<!\w)(WTS|FS|for sale|selling|price drop|asking price|sold)(?!\w)", re.IGNORECASE)
 _HANDLE = re.compile(r"[_\d@#/\\]")
 INTENT_LOOKBACK_CHARS = 300
 
